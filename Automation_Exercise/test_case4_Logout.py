@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 
-def test_login_invalid():
+def test_login_valid():
     # 1. Launch browser
     driver = webdriver.Chrome()
     driver.maximize_window()
@@ -16,8 +16,8 @@ def test_login_invalid():
 
     # 3. Verify that home page is visible successfully
     try:
-        assert "Automation Exercise" in driver.title
-        print("home page is visible successfully.Test passed")
+        assert "Automation Exercise2" in driver.title
+        print("Home page is visible successfully.Test passed")
     except Exception as e:
         print(f"home page is not visible successfully, Test Failed.", type(e).__name__)
 
@@ -28,6 +28,7 @@ def test_login_invalid():
         assert signup_button.is_displayed()
         print("Signup / Login Visible.Click on 'Signup / Login' button.")
         signup_button.click()
+        time.sleep(5)
     except Exception as e:
         print(f"Signup / Login not Visible, Test Failed.", type(e).__name__)
 
@@ -41,7 +42,7 @@ def test_login_invalid():
     except Exception as e:
         print(f"Login to your account' is not visible, Test Failed.", type(e).__name__)
 
-    # 6. Enter incorrect email address and password
+    # 6. Enter correct email address and password
     # Email address
     try:
         email = WebDriverWait(driver, 10).until(
@@ -49,7 +50,7 @@ def test_login_invalid():
                 (By.CSS_SELECTOR, ".login-form > form[method='post'] > input[name='email']")))
         assert email.is_displayed()
         print("Email is Visible.Enter incorrect email.")
-        email.send_keys("invalid@mail.com")
+        email.send_keys("y63ca@hotmail.com")
         time.sleep(5)
     except Exception as e:
         print(f"username not Visible.", type(e).__name__)
@@ -60,7 +61,7 @@ def test_login_invalid():
             EC.visibility_of_element_located((By.CSS_SELECTOR, "[type='password']")))
         assert password.is_displayed()
         print("password is Visible.Enter incorrect password")
-        password.send_keys("3231321")
+        password.send_keys("0123456789")
     except Exception as e:
         print(f"password not Visible.", type(e).__name__)
 
@@ -74,17 +75,34 @@ def test_login_invalid():
     except Exception as e:
         print(f"Login Button not Visible, Test Failed.", type(e).__name__)
 
-    # 8. Verify error 'Your email or password is incorrect!' is visible
+    # 8. Verify that 'Logged in as username' is visible
     try:
-        error_message = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, ".login-form > form[method='post'] > p")))
+        success_message = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, "li:nth-of-type(10) > a")))
 
-        assert "Your email or password is incorrect!" in error_message.text
-        print("'Your email or password is incorrect!t' visible.Test passed")
+        assert "Logged in as " in success_message.text
+        print("'Logged in as username' visible.Test passed")
     except Exception as e:
-        print(f"'Your email or password is incorrect!' is not visible, Test Failed.", type(e).__name__)
+        print(f"'Logged in as username' not visible.Test failed.", type(e).__name__)
+
+    # 9. Click 'Logout' button
+    try:
+        logout_button = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.LINK_TEXT, "Logout")))
+        assert logout_button.is_displayed()
+        print("logout Button is Visible.Click 'Logout' button")
+        logout_button.click()
+    except Exception as e:
+        print(f"'Logout' button not Visible.", type(e).__name__)
+
+    # 10. Verify that user is navigated to login page
+    try:
+        assert "Automation Exercise - Signup / Login" in driver.title
+        print("Login page is visible successfully.Test passed")
+    except Exception as e:
+        print(f"Login page is not visible successfully, Test Failed.", type(e).__name__)
 
     driver.quit()
 
 
-test_login_invalid()
+test_login_valid()
